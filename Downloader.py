@@ -5,23 +5,23 @@ import yt_dlp
 #pip install ffmpeg-python
 #pip install ffmpeg
 def get_video_url():
-    """Запрашивает ссылку на YouTube-видео у пользователя и проверяет её."""
-    url = input("📥 Вставьте ссылку на YouTube-видео:\n").strip()
+    """Requests a YouTube video link from the user and verifies it."""
+    url = input("📥 Paste the link to the YouTube video:\n").strip()
     if not url.startswith("http"):
-        print("❗ Неверная ссылка.")
+        print("❗ Invalid link.")
         return None
     return url
 
 def get_format_choice():
-    """Запрашивает у пользователя выбор формата для скачивания."""
-    choice = input("📼 Выберите формат: [1] mp4 (видео) | [2] mp3 (аудио): ").strip()
+    """Prompts the user to select a download format."""
+    choice = input("📼 Select format: [1] mp4 (video) | [2] mp3 (audio): ").strip()
     if choice in ['1', '2']:
         return choice
-    print("❗ Неверный выбор формата.")
+    print("❗Incorrect format selection.")
     return None
 
 def create_save_directory(format_choice):
-    """Создает директорию для сохранения скачанных файлов на рабочем столе."""
+    """Creates a directory for saving downloaded files on the desktop."""
     user_profile = os.environ.get('USERPROFILE') or os.path.expanduser('~')
     folder_name = 'Downloaded_videos' if format_choice == '1' else 'Downloaded_audios'
     save_dir = os.path.join(user_profile, 'OneDrive', 'Рабочий стол', folder_name)
@@ -29,15 +29,15 @@ def create_save_directory(format_choice):
     return save_dir
 
 def setup_ffmpeg():
-    """Возвращает путь к исполняемому файлу ffmpeg."""
+    """Returns the path to the ffmpeg executable."""
     ffmpeg_exe = r'C:\Users\User\ffmpeg\ffmpeg-7.1.1-essentials_build\bin\ffmpeg.exe'
     if not os.path.isfile(ffmpeg_exe):
-        print(f"❗ Не удается найти ffmpeg по пути: {ffmpeg_exe}. Пожалуйста, установите ffmpeg.")
+        print(f"❗ Unable to find ffmpeg in path: {ffmpeg_exe}. Please install ffmpeg.")
         return None
     return ffmpeg_exe
 
 def configure_download_options(format_choice, save_dir):
-    """Настраивает опции загрузки для yt-dlp."""
+    """Configures boot options for yt-dlp."""
     ydl_opts = {
         'outtmpl': os.path.join(save_dir, '%(title)s.%(ext)s'),
         'noplaylist': True,
@@ -59,13 +59,13 @@ def configure_download_options(format_choice, save_dir):
     return ydl_opts
 
 def download_video(url, ydl_opts):
-    """Скачивает видео с использованием yt-dlp."""
+    """Downloads video using yt-dlp."""
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
-        print("\n✅ Скачивание завершено!")
+        print("\n✅ Download complete!")
     except Exception as e:
-        print(f"\n❌ Ошибка: {e}")
+        print(f"\n❌ Error: {e}")
 
 def main():
     url = get_video_url()
@@ -80,6 +80,6 @@ def main():
     ydl_opts = configure_download_options(format_choice, save_dir)
     download_video(url, ydl_opts)
 
-# 🚀 Старт
+# 🚀 Start
 if __name__ == "__main__":
     main()
